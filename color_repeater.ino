@@ -18,7 +18,7 @@ int green = 0;
 int blue = 0;
 
 void initComponents() 
-{
+  {
   init();
   lcdInit();
 }
@@ -62,7 +62,8 @@ void updateInputs()
   updateButtonCooldown();
 }
 
-void printStats () {
+void printStats () 
+{
   lcdPrint("rotation = ");
   lcdPrint(rotation);
   lcdMoveCursor(0, 1);
@@ -122,13 +123,13 @@ void printRGBValues(int r, int g, int b)
 
 void runColors()
 {
-  red = colors[0][0];
-  green = colors[0][1];
-  blue = colors[0][2];
-
   int i = 0;
-  while(i < 2)
+  while(i < 3)
   {
+    red = colors[i][0];
+    green = colors[i][1];
+    blue = colors[i][2];
+    
     int increments = 100;
   
     int next_red = colors[i + 1][0];
@@ -146,7 +147,7 @@ void runColors()
         red += red_increment;
         green += green_increment;
         blue += blue_increment;
-        printRGBValues();
+        printRGBValues(red, green, blue);
         j++;
     }
     
@@ -158,8 +159,6 @@ void runColors()
     }
   }
 }
-
-
 
 int main() 
 {
