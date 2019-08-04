@@ -1,8 +1,10 @@
 ARDUINO_DIR = /usr/share/arduino
 ARDUINO_PORT = /dev/ttyACM*
 
-USER_LIB_PATH = /home/Arduino/libraries ../libs
-ARDUINO_LIBS += custom_lib
+USER_LIB_PATH+= /home/jp/Arduino/libraries
+
+ARDUINO_LIBS += Wire
+
 BOARD_TAG = uno
 
 
