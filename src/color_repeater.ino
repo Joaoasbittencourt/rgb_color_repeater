@@ -143,12 +143,12 @@ void runColors()
 		int j = 0;
 		while(j < increments)
 		{
-				delay(program_delay);	
-				red += red_increment;
-				green += green_increment;
-				blue += blue_increment;
-				printRGBValues(red, green, blue);
-				j++;
+			delay(program_delay);	
+			red += red_increment;
+			green += green_increment;
+			blue += blue_increment;
+			printRGBValues(red, green, blue);
+			j++;
 		}
 		
 		lcdBacklightColour(next_red, next_green, next_blue);
