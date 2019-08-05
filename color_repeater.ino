@@ -17,10 +17,25 @@ int red = 0;
 int green = 0;
 int blue = 0;
 
+
 void initComponents() 
 {
 	init();
 	lcdInit();
+}
+
+void setConfigBrightness()
+{
+	if (brightness > 1) {
+		brightness = 1;
+	}
+
+	if (brightness < 0) {
+		brightness = 0;
+	}
+
+	double value = 255.0 * brightness;
+	lcdBacklightColour(value, value, value);
 }
 
 char getColorIndexNameByIndex(int i) 
@@ -53,6 +68,7 @@ void updateButtonCooldown()
 		button_active = false;
 	}
 }
+
 
 void updateInputs()
 {
@@ -94,6 +110,7 @@ void requestUserColorInput()
 		{
 			printUserColorConfigControl(color, component);
 			updateInputs();
+			setConfigBrightness();
 			delay(program_delay);
 
 			if (button_active) 
