@@ -34,7 +34,7 @@ void setConfigBrightness()
 		brightness = 0;
 	}
 
-	double value = 255.0 * brightness;
+	double value =  255 - 245.0 * brightness;
 	lcdBacklightColour(value, value, value);
 }
 
