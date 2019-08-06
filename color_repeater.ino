@@ -1,9 +1,13 @@
 #include <seeed-kit.h>
 #include <Wire.h>
 
-int colors[3][3] = {{ 255, 0, 0 },
- 					{ 0, 255, 0 },
- 					{ 0, 0, 255 }};
+const int NUM_OF_COLORS = 4;
+
+int colors[NUM_OF_COLORS][3]; 
+							// {{ 255, 0, 0 },
+ 							//  { 0, 255, 0 },
+ 							//  { 0, 0, 255 },
+							//  { 0, 255, 0 }};
 
 double rotation = 0.0;
 double brightness = 0.0;
@@ -109,7 +113,7 @@ void printUserColorConfigControl(int colorIndex, int colorComponentIndex)
 
 void requestUserColorInput() 
 {
-	for (int color = 0; color < 3; color++) 
+	for (int color = 0; color < NUM_OF_COLORS; color++) 
 	{
 		int component = 0;
 		while (component < 3)
@@ -160,13 +164,12 @@ void printTransitionProgress(int start, int end, double percentage)
 void runColors()
 {
 	int i = 0;
-	int last_index = 2;
 
-	while(i < last_index + 1)
+	while(i < NUM_OF_COLORS)
 	{
 		int next_color_index = i + 1;
 
-		if (next_color_index > last_index)
+		if (next_color_index > NUM_OF_COLORS - 1)
 		{
 			next_color_index = 0;
 		}
@@ -207,7 +210,7 @@ int main()
 	initComponents();
 	lcdClear();
 
-	runTest();
+	// runTest();
 
 	requestUserColorInput();
 	runColors();
