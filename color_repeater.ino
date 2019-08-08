@@ -1,31 +1,83 @@
 #include <seeed-kit.h>
 #include <Wire.h>
 
+
 const int NUM_OF_COLORS = 4;
-
 int colors[NUM_OF_COLORS][3]; 
-							// {{ 255, 0, 0 },
- 							//  { 0, 255, 0 },
- 							//  { 0, 0, 255 },
-							//  { 0, 255, 0 }};
 
+// Rotation at the rotary dial
 double rotation = 0.0;
+
+// Ambient Brightness
 double brightness = 0.0;
 
+// Time in ms to each program loop
 double program_delay = 50;
 
+// If the button is currently pressed
 boolean button_pressed = false;
+
+// if the button is available for a action
 boolean button_active = false;
+
+// time till the button can be pressed again
 double button_cooldown = 0;
+
+// total amout of ms that the button will be off after being pressed
 double button_cooldown_time = 1000;
 
+// current colors on the LCD
 double red = 0;
 double green = 0;
 double blue = 0;
 
-void runTest() 
+
+
+/**
+   Return information indicating the polar coordinates of the joystick and
+   whether or not it has been clicked.
+
+   @param   r         radius/distance from origin of joystick position
+   @param   theta     angle in radians betewen x-axis and line form origin to joystick position
+
+   @returns click    whether or not joystick has been clicked
+
+   @modifies   value of r and theta to store current joystck polar coordinates
+*/
+
+/**
+   Initialize every component used
+*/
+void initComponents();
+
+/**
+   Set LCD brightness during color menu 
+*/
+void setConfigBrightness();
+
+
+/**
+   Return correspondent letter for each one of RGB values
+
+   @param  i  RGB component code index
+*/
+char getColorIndexNameByIndex(int i);
+void updateButtonCooldown();
+void printStats();
+void updateInputs();
+void printUserColorConfigControl(int colorIndex, int colorComponentIndex);
+void requestUserColorInput();
+void printRGBValues(int r, int g, int b);
+void printTransitionProgress(int start, int end, double percentage);
+void runColors();
+
+int main() 
 {
+	initComponents();
+	lcdClear();
+	requestUserColorInput();
 	runColors();
+	return 0;
 }
 
 void initComponents() 
@@ -88,7 +140,7 @@ void updateInputs()
 	updateButtonCooldown();
 }
 
-void printStats () 
+void printStats() 
 {
 	lcdPrint("rotation = ");
 	lcdPrint(rotation);
@@ -168,6 +220,7 @@ void runColors()
 	while(i < NUM_OF_COLORS)
 	{
 		int next_color_index = i + 1;
+		int increments = 100;
 
 		if (next_color_index > NUM_OF_COLORS - 1)
 		{
@@ -178,41 +231,23 @@ void runColors()
 		green = colors[i][1];
 		blue = colors[i][2];
 		
-		int increments = 100;
-	
-		int next_red = colors[next_color_index][0];
-		int next_green = colors[next_color_index][1];
-		int next_blue = colors[next_color_index][2];
-
-		double dr = (next_red - red) / increments;
-		double dg = (next_green - green ) / increments;
-		double db = (next_blue - blue) / increments;
+		double dr = (colors[next_color_index][0] - red) / increments;
+		double dg = (colors[next_color_index][1] - green) / increments;
+		double db = (colors[next_color_index][2] - blue) / increments;
 	
 		for(int j = 0; j < increments; j++)
 		{
-			delay(program_delay);
-
 			red += dr;
 			green += dg;
 			blue += db;
 			double percentage = j * 100.0 / increments;
+			
 			lcdClear();
 			printRGBValues(red, green, blue);
 			printTransitionProgress(i + 1, next_color_index + 1, percentage);
+			delay(program_delay);
 		}
 		
 		i = next_color_index;  
 	}
-}
-
-int main() 
-{
-	initComponents();
-	lcdClear();
-
-	// runTest();
-
-	requestUserColorInput();
-	runColors();
-	return 0;
 }
