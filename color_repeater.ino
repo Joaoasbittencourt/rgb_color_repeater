@@ -32,19 +32,6 @@ double green = 0;
 double blue = 0;
 
 
-
-/**
-   Return information indicating the polar coordinates of the joystick and
-   whether or not it has been clicked.
-
-   @param   r         radius/distance from origin of joystick position
-   @param   theta     angle in radians betewen x-axis and line form origin to joystick position
-
-   @returns click    whether or not joystick has been clicked
-
-   @modifies   value of r and theta to store current joystck polar coordinates
-*/
-
 /**
    Initialize every component used
 */
@@ -57,19 +44,72 @@ void setConfigBrightness();
 
 
 /**
-   Return correspondent letter for each one of RGB values
-
+ * Returns the letter correspondent to each RGB color component
    @param  i  RGB component code index
+   
+   @returns R G or B depending on the index
 */
 char getColorIndexNameByIndex(int i);
+
+
+/**
+   Updates variables related to the button cooldown
+   depending on the user interaction.
+
+   @param  i  RGB component code index
+
+   @modifies  button_active, button_cooldown 
+*/
 void updateButtonCooldown();
-void printStats();
+
+/**
+   Updates all state related to user input
+   can also call updateButtonCooldown.
+
+   @modifies  rotation, brightness and button_pressed
+*/
 void updateInputs();
+
+/**
+   Prints on the first line of LCD Screen
+   instructions for the user to input a value of a specific color
+*/
 void printUserColorConfigControl(int colorIndex, int colorComponentIndex);
+
+/**
+   Starts the loop that handles all user input 
+   during the configuration of user colors.
+*/
 void requestUserColorInput();
+
+/**
+   Prints on the first line of LCD Screen
+   the current values of RGB color of the RGB Backlight
+
+   @param  r    red value
+   @param  g    green value
+   @param  b   	blue value
+*/
 void printRGBValues(int r, int g, int b);
+
+/**
+   Prints on the second line of LCD Screen
+   the current progress to reach the next color
+
+   @param  start    	number of the start color
+   @param  end    		number of the final color
+   @param  percentage   percentage to reach the next color 		
+*/
 void printTransitionProgress(int start, int end, double percentage);
+
+/**
+   Start looping throught the colors on the color matrix
+
+   @modifies  red, green, blue
+*/
 void runColors();
+
+
 
 int main() 
 {
@@ -79,6 +119,13 @@ int main()
 	runColors();
 	return 0;
 }
+
+
+/**
+ * 
+ * Implementations
+ * 
+ */
 
 void initComponents() 
 {
@@ -139,16 +186,6 @@ void updateInputs()
 	button_pressed = digitalRead(3);
 	updateButtonCooldown();
 }
-
-void printStats() 
-{
-	lcdPrint("rotation = ");
-	lcdPrint(rotation);
-	lcdMoveCursor(0, 1);
-	lcdPrint("brightness = ");
-	lcdPrint(brightness);
-}
-
 
 void printUserColorConfigControl(int colorIndex, int colorComponentIndex)
 {
